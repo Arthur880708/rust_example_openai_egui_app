@@ -78,10 +78,9 @@ struct MyApp {
 
 impl Default for MyApp {
     fn default() -> Self {
-        dotenv().ok(); // .env 파일 로드
+        dotenv().ok();
         let api_key = env::var("OPENAI_API_KEY").expect("API key not found in .env file");
-
-        // instruction.md 파일에서 메시지 읽어오기
+        
         let my_message = fs::read_to_string("instruction.md")
             .expect("Unable to read instruction.md file");
 
@@ -100,10 +99,9 @@ impl eframe::App for MyApp {
         let mut fonts = egui::FontDefinitions::default();
         fonts.font_data.insert(
             "my_font".to_owned(),
-            egui::FontData::from_static(include_bytes!("NanumGothic-Regular.ttf")), // 한글 폰트 파일 경로
+            egui::FontData::from_static(include_bytes!("NanumGothic-Regular.ttf")), 
         );
-
-        // 폰트를 텍스트 스타일에 할당
+        
         fonts.families.entry(egui::FontFamily::Proportional).or_default().insert(0, "my_font".to_owned());
         fonts.families.entry(egui::FontFamily::Monospace).or_default().push("my_font".to_owned());
 
@@ -111,15 +109,13 @@ impl eframe::App for MyApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("OpenAI 카 딜러");
-
-            // data_json 입력 필드
+            
             ui.label("질문 :");
             ui.text_edit_multiline(&mut self.data_json);
-
-            // OpenAI로 전송 버튼
+            
             if ui.button("질문 보내기").clicked() {
-                let my_message = self.my_message.clone(); // instruction.md에서 로드한 메시지
-                let data_json = self.data_json.clone();   // 사용자가 입력한 메시지
+                let my_message = self.my_message.clone(); 
+                let data_json = self.data_json.clone();
                 let api_key = self.api_key.clone();
 
                 let runtime = Builder::new_current_thread()
